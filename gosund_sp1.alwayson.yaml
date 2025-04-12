@@ -1,0 +1,26 @@
+esphome:
+  comment: "Gosund SP1 - Always On"
+
+# Binary sensor for the power button
+binary_sensor:
+  - platform: gpio
+    name: Button
+    id: button
+    pin:
+      number: GPIO3
+      inverted: true
+    on_press:
+      - switch.toggle: switchid
+    disabled_by_default: True
+
+switch:
+  - platform: output
+    id: switchid
+    output: relay
+    name: Schalter
+    disabled_by_default: true
+    restore_mode: RESTORE_DEFAULT_ON
+    on_turn_on:
+      - light.turn_on: led
+    on_turn_off:
+      - light.turn_off: led
