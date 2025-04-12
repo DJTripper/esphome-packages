@@ -1,0 +1,44 @@
+esphome:
+  comment: "Sonoff S20"
+
+esp8266:
+  board: esp01_1m
+
+# Device Specific Config
+output:
+  # Register the green LED as a dimmable output ....
+  - platform: esp8266_pwm
+    id: s20_green_led
+    pin:
+      number: GPIO13
+      inverted: true
+
+light:
+  # ... and then make a light out of it.
+  - platform: monochromatic
+    name: "LED"
+    output: s20_green_led
+    disabled_by_default: True
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Button"
+    disabled_by_default: True
+  - platform: status
+    name: "Status"
+    disabled_by_default: True
+  - platform: gpio
+    pin: GPIO2
+    name: "Sensor"
+    disabled_by_default: True
+
+switch:
+  - platform: gpio
+    name: "Relais"
+    pin: GPIO12
