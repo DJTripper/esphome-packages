@@ -1,0 +1,95 @@
+esphome:
+  comment: "Nous A8T Always On"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+sensor:
+  - platform: hlw8012
+    model: BL0937
+    sel_pin:
+      number: GPIO14
+      inverted: True
+    cf_pin: GPIO27
+    cf1_pin: GPIO26
+    current_resistor: "0.00126"
+    voltage_divider: "1570"
+    change_mode_every: 1
+    update_interval: 5s
+
+    current:
+      name: "Stromstaerke"
+      internal: true
+      disabled_by_default: True
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      icon: mdi:current-ac
+      filters:
+        - lambda: |-
+            if (x < 0.01) return 0;
+            else return x;
+
+    voltage:
+      name: "Spannung"
+      unit_of_measurement: V
+      accuracy_decimals: 1
+      icon: mdi:flash-outline
+      internal: true
+      disabled_by_default: True
+
+    power:
+      id: power
+      name: "Leistung"
+      unit_of_measurement: W
+      icon: mdi:flash-outline
+      force_update: true
+      filters:
+        - calibrate_linear:
+            - 0.0 -> 0.0
+            - 24.50 -> 28.40
+  - platform: total_daily_energy
+    name: "Tagesleistung"
+    power_id: power
+    state_class: total_increasing
+    unit_of_measurement: kWh
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+
+output:
+  - platform: gpio
+    pin: GPIO13
+    id: relay
+
+light:
+  - platform: status_led
+    internal: True
+    name: "Kontroll-LED"
+    id: led1
+    pin:
+      number: GPIO02
+      inverted: true
+
+switch:
+  - platform: output
+    id: switchid
+    name: "Relais"
+    output: relay
+    restore_mode: RESTORE_DEFAULT_ON
+    on_turn_on:
+      - light.turn_on: led1
+    on_turn_off:
+      - light.turn_off: led1
+
+binary_sensor:
+  - platform: gpio
+    name: "Button"
+    disabled_by_default: True
+    pin:
+      number: GPIO04
+      inverted: yes
+      mode: INPUT_PULLUP
+    on_press:
+      - switch.toggle: "switchid"
