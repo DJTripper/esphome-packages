@@ -14,7 +14,7 @@ binary_sensor:
     disabled_by_default: True
 
 light:
-  - platform: output
+  - platform: binary
     id: lightid
     output: relay
     name: Licht
