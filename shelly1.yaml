@@ -1,0 +1,29 @@
+esphome:
+  comment: "Shelly 1"
+
+esp8266:
+  board: esp01_1m
+
+# Device Specific Config
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: shelly_1_relay
+
+light:
+  - platform: binary
+    name: Licht
+    output: shelly_1_relay
+    restore_mode: RESTORE_DEFAULT_OFF
+    id: lightid
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+    name: Schalter
+    on_state:
+      then:
+        - light.toggle: lightid
+    id: switchid
+    disabled_by_default: True
