@@ -1,0 +1,119 @@
+esphome:
+  comment: "Shelly 3EM"
+
+esp8266:
+  board: esp01_1m
+
+i2c:
+  sda: GPIO12
+  scl: GPIO14
+  frequency: 200kHz
+
+# Example configuration entry
+light:
+  - platform: status_led
+    name: "Status LED"
+    pin: GPIO2
+    disabled_by_default: True
+
+switch:
+  - id: relay
+    name: Schalter
+    platform: gpio
+    pin:
+      number: GPIO15
+    disabled_by_default: True
+
+binary_sensor:
+  - id: button
+    name: Button
+    platform: gpio
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    disabled_by_default: True
+
+sensor:
+  - id: ade7880_device
+    platform: ade7880
+    irq0_pin:
+      number: GPIO13
+    irq1_pin:
+      number: GPIO5
+    reset_pin:
+      number: GPIO16
+    frequency: 50Hz
+    update_interval: 5s
+    phase_a:
+      name: ${phase_a_name}
+      voltage: Spannung
+      current:
+        name: Stromstaerke
+      active_power:
+        name: Leistung
+        filters:
+          multiply: -1
+      #      power_factor: Power Factor
+      #      apparent_power: Scheinleistung
+      forward_active_energy:
+        name: Energie
+        filters:
+          multiply: -1
+      #      reverse_active_energy: Reverse Active Energy
+      calibration:
+        current_gain: ${rms_current_a}
+        voltage_gain: ${rms_voltage_a}
+        power_gain: ${powers_totactive_a}
+        phase_angle: ${angles_angle0}
+    phase_b:
+      name: ${phase_b_name}
+      voltage: Spannung
+      current:
+        name: Stromstaerke
+      active_power:
+        name: Leistung
+        filters:
+          multiply: -1
+      #      power_factor: Power Factor
+      #      apparent_power: Scheinleistung
+      forward_active_energy:
+        name: Energie
+        filters:
+          multiply: -1
+      #      reverse_active_energy: Reverse Active Energy
+      calibration:
+        current_gain: ${rms_current_b}
+        voltage_gain: ${rms_voltage_b}
+        power_gain: ${powers_totactive_b}
+        phase_angle: ${angles_angle1}
+    phase_c:
+      name: ${phase_c_name}
+      voltage: Spannung
+      current:
+        name: Stromstaerke
+      active_power:
+        name: Leistung
+        filters:
+          multiply: -1
+      #      power_factor: Power Factor
+      #      apparent_power: Scheinleistung
+      forward_active_energy:
+        name: Energie
+        filters:
+          multiply: -1
+      #      reverse_active_energy: Reverse Active Energy
+      calibration:
+        current_gain: ${rms_current_c}
+        voltage_gain: ${rms_voltage_c}
+        power_gain: ${powers_totactive_c}
+        phase_angle: ${angles_angle2}
+#    neutral:
+#      name: Neutral
+#      current:
+#        name: Stromstaerke
+#        unit_of_measurement: mA
+#        filters:
+#          - multiply: 1000
+#      calibration:
+#        current_gain: ${rms_current_s}
