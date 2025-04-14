@@ -1,0 +1,159 @@
+esphome:
+  comment: "Shelly Plus 2PM"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+i2c:
+  sda: GPIO26
+  scl: GPIO25
+
+sensor:
+  - platform: ade7953_i2c
+    irq_pin: GPIO27 # Prevent overheating by setting this
+    voltage:
+      name: Spannung
+      entity_category: 'diagnostic'
+      disabled_by_default: True
+    current_a:
+      name: ${channel1} Stromstaerke
+      entity_category: 'diagnostic'
+      disabled_by_default: True
+    current_b:
+      name: ${channel2} Stromstaerke
+      entity_category: 'diagnostic'
+      disabled_by_default: True
+    active_power_a:
+      name: ${channel1} Leistung
+      id: power_channel_2
+      unit_of_measurement: W
+      entity_category: 'diagnostic'
+      filters:
+        - multiply: -1
+      # active_power_a is normal, so don't multiply by -1
+      on_value_range:
+        - above: ${max_power}
+          then:
+            - light.turn_off: lightid1
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from ${friendly_name}
+                data_template:
+                  message: Light ${channel1} turned off because power exceeded ${max_power}W
+    active_power_b:
+      name: ${channel2} Leistung
+      id: power_channel_1
+      unit_of_measurement: W
+      entity_category: 'diagnostic'
+      filters:
+        - multiply: -1
+      on_value_range:
+        - above: ${max_power}
+          then:
+            - light.turn_off: lightid2
+            - homeassistant.service:
+                service: persistent_notification.create
+                data:
+                  title: Message from ${friendly_name}
+                data_template:
+                  message: Light ${channel2} turned off because power exceeded ${max_power}W
+    update_interval: 15s
+
+  - platform: total_daily_energy
+    name: ${channel2} Tagesleistung
+    power_id: power_channel_1
+    filters:
+      # Multiplication factor from Wh to kWh is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+  - platform: total_daily_energy
+    name: ${channel1} Tagesleistung
+    power_id: power_channel_2
+    filters:
+      # Multiplication factor from Wh to kWh is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+  # NTC Temperature
+  - platform: ntc
+    sensor: temp_resistance_reading
+    name: Temperatur
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    icon: "mdi:thermometer"
+    calibration:
+      b_constant: 3350
+      reference_resistance: 10kOhm
+      reference_temperature: 298.15K
+    on_value_range:
+      - above: ${max_temp}
+        then:
+          - light.turn_off: lightid1
+          - light.turn_off: lightid2
+          - homeassistant.service:
+              service: persistent_notification.create
+              data:
+                title: Message from ${friendly_name}
+              data_template:
+                message: ${friendly_name} turned off because temperature exceeded ${max_temp} °C
+  - platform: resistance
+    id: temp_resistance_reading
+    sensor: temp_analog_reading
+    configuration: DOWNSTREAM
+    resistor: 5.6kOhm
+    disabled_by_default: True
+  # Required for NTC sensor
+  - platform: adc
+    id: temp_analog_reading
+    pin: GPIO35
+    attenuation: 12db
+    update_interval: 15s
+    disabled_by_default: True
+
+output:
+  - platform: gpio
+    pin: GPIO13
+    id: shelly_2_relay_1
+  - platform: gpio
+    pin: GPIO12
+    id: shelly_2_relay_2
+
+light:
+  - platform: binary
+    name: "${channel1}"
+    output: shelly_2_relay_1
+    restore_mode: RESTORE_DEFAULT_OFF
+    id: lightid1
+  - platform: binary
+    name: "${channel2}"
+    output: shelly_2_relay_2
+    restore_mode: RESTORE_DEFAULT_OFF
+    id: lightid2
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+    name: "${channel1} Schalter"
+    disabled_by_default: True
+    on_press:
+      then:
+        - light.turn_on: lightid1
+    on_release:
+      then:
+        - light.turn_off: lightid1
+  - platform: gpio
+    pin:
+      number: GPIO18
+    name: "${channel2} Schalter"
+    disabled_by_default: True
+    on_press:
+      then:
+        - light.turn_on: lightid2
+    on_release:
+      then:
+        - light.turn_off: lightid2
