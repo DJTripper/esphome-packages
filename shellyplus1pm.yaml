@@ -1,3 +1,7 @@
+substitutions:
+  max_power: 3700
+  max_temp: 85.0
+
 esphome:
   comment: "Shelly Plus 1PM"
   platformio_options:
