@@ -1,6 +1,6 @@
 substitutions:
-  max_power: 1800
-  max_temp: 85.0
+  max_power: "1800"
+  max_temp: "85.0"
 
 esphome:
   comment: "Shelly Plus 1PM Mini"
