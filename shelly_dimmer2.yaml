@@ -25,7 +25,9 @@ light:
       disabled_by_default: True
     min_brightness: ${min_brightness}
     max_brightness: ${max_brightness}
-    firmware: "51.6"
+    firmware:
+      version: "51.6"
+      update: true
     restore_mode: RESTORE_DEFAULT_OFF
     #  - platform: binary
     #    name: "${friendly_name} RESET SHD"
