@@ -43,7 +43,7 @@ text_sensor:
     name: Version
     disabled_by_default: True
   - platform: wifi_info
-    id: net_info
+#    id: net_info
     ip_address:
       name: IP Address
 
