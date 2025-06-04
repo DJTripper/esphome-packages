@@ -1,6 +1,8 @@
 substitutions:
   max_power: "1800"
   max_temp: "85.0"
+  voltage_reference: "15873.35944299"
+  current_reference: "251213.46469622"
 
 esphome:
   comment: "Shelly Plus 1PM Mini"
@@ -68,6 +70,8 @@ sensor:
     disabled_by_default: True
   - platform: bl0942
     uart_id: uart_bus
+    voltage_reference: ${voltage_reference}
+    current_reference: ${current_reference}
     current:
       name: "Stromstaerke"
       unit_of_measurement: A
