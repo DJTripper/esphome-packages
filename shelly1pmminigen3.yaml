@@ -3,6 +3,7 @@ substitutions:
   max_temp: "85.0"
   voltage_reference: "15873.35944299"
   current_reference: "251213.46469622"
+  inverted: false
 
 esphome:
   comment: "Shelly Plus 1PM Mini"
@@ -31,7 +32,9 @@ light:
 binary_sensor:
   - platform: gpio
     name: Schalter
-    pin: 10
+    pin:
+      number: 10
+      inverted: ${inverted}
     on_state:
       then:
         - light.toggle: "lightid"
