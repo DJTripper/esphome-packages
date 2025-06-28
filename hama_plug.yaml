@@ -61,8 +61,8 @@ switch:
     id: switchid
     restore_mode: RESTORE_DEFAULT_OFF
     on_turn_on:
-      delay: 30m
-      switch.turn_off: switchid
+      - delay: 30m
+      - switch.turn_off: switchid
 
 output:
   # esphome state led
