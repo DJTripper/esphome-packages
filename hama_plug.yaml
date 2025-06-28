@@ -56,11 +56,13 @@ binary_sensor:
 
 switch:
   - platform: gpio
-    name: Schalter
+    name: Bewässerung
     pin: GPIO14
     id: switchid
-    restore_mode: RESTORE_DEFAULT_ON
-
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      delay: 30m
+      switch.turn_off: switchid
 
 output:
   # esphome state led
