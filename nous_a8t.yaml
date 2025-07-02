@@ -94,6 +94,7 @@ light:
 
 binary_sensor:
   - platform: gpio
+    id: button1
     name: "Schalter"
     disabled_by_default: True
     pin:
