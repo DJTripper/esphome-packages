@@ -81,7 +81,7 @@ light:
 
 switch:
   - platform: gpio
-    name: Bewässerung
+    name: ${friendly_name}
     pin: GPIO13
     id: switchid
     restore_mode: RESTORE_DEFAULT_OFF
