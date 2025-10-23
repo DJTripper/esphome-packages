@@ -6,7 +6,7 @@ substitutions:
   inverted: "false"
 
 esphome:
-  comment: "Shelly Plus 1PM Mini"
+  comment: "Shelly Plus 1PM Mini Presence"
 
 esp32:
   board: esp32-c3-devkitm-1
