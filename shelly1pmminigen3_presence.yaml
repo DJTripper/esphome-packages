@@ -33,6 +33,7 @@ switch:
   - platform: template
     name: Bewegungsmelder aktiv
     id: "pir_sensor_active"
+    optimistic: true
 
 binary_sensor:
   - platform: gpio
