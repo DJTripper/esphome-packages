@@ -30,7 +30,8 @@ light:
     id: lightid
 
 switch:
-  - name: Bewegungsmelder an
+  - platform: template
+    name: Bewegungsmelder an
     id: "pir_sensor_active"
 
 binary_sensor:
@@ -39,9 +40,18 @@ binary_sensor:
     pin:
       number: 10
       inverted: ${inverted}
-    on_state:
-      then:
-        - light.toggle: "lightid"
+    on_turn_on:
+      if:
+        condition:
+          switch.is_on: "pir_sensor_active"
+        then:
+          - light.turn_on: "lightid"
+    on_turn_off:
+      if:
+        condition:
+          switch.is_on: "pir_sensor_active"
+        then:
+          - light.turn_off: "lightid"
     filters:
       - delayed_on_off: 50ms
     disabled_by_default: True
