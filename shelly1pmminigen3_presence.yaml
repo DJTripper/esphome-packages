@@ -41,13 +41,13 @@ binary_sensor:
     pin:
       number: 10
       inverted: ${inverted}
-    on_turn_on:
+    on_press:
       if:
         condition:
           switch.is_on: "pir_sensor_active"
         then:
           - light.turn_on: "lightid"
-    on_turn_off:
+    on_release:
       if:
         condition:
           switch.is_on: "pir_sensor_active"
