@@ -32,6 +32,7 @@ light:
 switch:
   - platform: template
     name: Bewegungsmelder aktiv
+    restore_mode: RESTORE_DEFAULT_ON
     id: "pir_sensor_active"
     optimistic: true
 
