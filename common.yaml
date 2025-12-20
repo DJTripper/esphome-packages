@@ -10,7 +10,7 @@ wifi:
   networks: ${wifi}
   ap:
     ssid: ${devicename}_fallback
-    password: ${wifi_password}
+    password: ${wifi[0].password}
     ap_timeout: 1min
   use_address: ${devicename}.local
   min_auth_mode: WPA2
