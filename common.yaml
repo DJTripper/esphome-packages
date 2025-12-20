@@ -7,8 +7,7 @@ network:
     
 # WiFi connection
 wifi:
-  ssid: ${wifi_ssid}
-  password: ${wifi_password}
+  networks: ${wifi}
   ap:
     ssid: ${devicename}_fallback
     password: ${wifi_password}
