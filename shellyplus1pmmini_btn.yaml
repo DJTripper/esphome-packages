@@ -33,7 +33,7 @@ binary_sensor:
     pin: GPIO10
     on_press:
       then:
-        - light.toggle: relay
+        - light.toggle: lightid
     disabled_by_default: True
 
 sensor:
