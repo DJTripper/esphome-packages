@@ -29,6 +29,7 @@ light:
 
 binary_sensor:
   - platform: gpio
+    id: input_sw
     name: Schalter
     pin: GPIO10
     on_state:
