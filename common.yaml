@@ -20,9 +20,9 @@ logger:
   baud_rate: 0
 
 mqtt:
-  broker: 192.168.0.3
-  username: esphome
-  password: ${ota_password}
+  broker: ${mqtt.broker}
+  username: ${mqtt.username}
+  password: ${mqtt.password}
   topic_prefix: ESPHome/${devicename}
 
 # Enable Home Assistant API
