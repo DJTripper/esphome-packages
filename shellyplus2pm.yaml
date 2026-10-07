@@ -103,11 +103,13 @@ sensor:
   - platform: resistance
     id: temp_resistance_reading
     sensor: temp_analog_reading
+    name: temp_resistance_reading
     configuration: DOWNSTREAM
     resistor: 5.6kOhm
     disabled_by_default: True
   # Required for NTC sensor
   - platform: adc
+    name: temp_analog_reading
     id: temp_analog_reading
     pin: GPIO35
     attenuation: 12db
