@@ -58,6 +58,7 @@ sensor:
       #      apparent_power: Scheinleistung
       reverse_active_energy:
         name: Energie
+        unit_of_measurement: Wh
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_a}
@@ -77,6 +78,7 @@ sensor:
       #      apparent_power: Scheinleistung
       reverse_active_energy:
         name: Energie
+        unit_of_measurement: Wh
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_b}
@@ -96,6 +98,7 @@ sensor:
       #      apparent_power: Scheinleistung
       reverse_active_energy:
         name: Energie
+        unit_of_measurement: Wh
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_c}
