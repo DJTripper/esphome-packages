@@ -14,7 +14,6 @@ wifi:
     ap_timeout: 1min
   use_address: ${devicename}.local
   min_auth_mode: WPA2
-  power_save_mode: none
 
 # Enable logging
 logger:
