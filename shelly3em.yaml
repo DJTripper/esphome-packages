@@ -56,10 +56,8 @@ sensor:
           multiply: -1
       #      power_factor: Power Factor
       #      apparent_power: Scheinleistung
-      forward_active_energy:
+      reverse_active_energy:
         name: Energie
-        filters:
-          multiply: -1
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_a}
@@ -77,10 +75,8 @@ sensor:
           multiply: -1
       #      power_factor: Power Factor
       #      apparent_power: Scheinleistung
-      forward_active_energy:
+      reverse_active_energy:
         name: Energie
-        filters:
-          multiply: -1
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_b}
@@ -98,10 +94,8 @@ sensor:
           multiply: -1
       #      power_factor: Power Factor
       #      apparent_power: Scheinleistung
-      forward_active_energy:
+      reverse_active_energy:
         name: Energie
-        filters:
-          multiply: -1
       #      reverse_active_energy: Reverse Active Energy
       calibration:
         current_gain: ${rms_current_c}
