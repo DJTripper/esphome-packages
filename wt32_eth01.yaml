@@ -1,0 +1,21 @@
+esphome:
+  comment: "WT32-ETH01 (Ethernet)"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO0_IN
+  phy_addr: 1
+  power_pin: GPIO16
+  use_address: ${devicename}.local
+
+text_sensor:
+  - platform: ethernet_info
+    ip_address:
+      name: IP Address
