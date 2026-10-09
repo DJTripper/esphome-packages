@@ -1,0 +1,42 @@
+esphome:
+  name: ${devicename}
+  friendly_name: ${friendly_name}
+
+network:
+  enable_ipv6: true
+
+logger:
+  baud_rate: 0
+
+mqtt:
+  broker: ${mqtt.broker}
+  username: ${mqtt.username}
+  password: ${mqtt.password}
+  topic_prefix: ESPHome/${devicename}
+
+api:
+  encryption:
+    key: ${api_encryption_key}
+
+ota:
+  platform: esphome
+  encryption:
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+text_sensor:
+  - platform: version
+    name: Version
+    disabled_by_default: True
+
+switch:
+  - platform: restart
+    name: Restart Switch
+    disabled_by_default: True
+
+sensor:
+  - platform: uptime
+    name: Uptime
+    disabled_by_default: True
