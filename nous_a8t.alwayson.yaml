@@ -1,3 +1,11 @@
+# Calibration per device: override these in the device's substitutions
+# (values from a8t_calibrate.py). power_calibration 1.159184 reproduces the former
+# calibrate_linear 24.50 -> 28.40; set it to "1" once divider/resistor are calibrated.
+substitutions:
+  voltage_divider: "1570"
+  current_resistor: "0.00126"
+  power_calibration: "1.159184"
+
 esphome:
   comment: "Nous A8T Always On"
 
@@ -8,20 +16,21 @@ esp32:
 
 sensor:
   - platform: hlw8012
+    id: power_sensor
     model: BL0937
     sel_pin:
       number: GPIO14
       inverted: True
     cf_pin: GPIO27
     cf1_pin: GPIO26
-    current_resistor: "0.00126"
-    voltage_divider: "1570"
+    current_resistor: ${current_resistor}
+    voltage_divider: ${voltage_divider}
     change_mode_every: 1
     update_interval: 5s
 
     current:
+      id: current
       name: "Stromstaerke"
-      internal: true
       disabled_by_default: True
       unit_of_measurement: A
       accuracy_decimals: 3
@@ -32,11 +41,11 @@ sensor:
             else return x;
 
     voltage:
+      id: voltage
       name: "Spannung"
       unit_of_measurement: V
       accuracy_decimals: 1
       icon: mdi:flash-outline
-      internal: true
       disabled_by_default: True
 
     power:
@@ -46,9 +55,7 @@ sensor:
       icon: mdi:flash-outline
       force_update: true
       filters:
-        - calibrate_linear:
-            - 0.0 -> 0.0
-            - 24.50 -> 28.40
+        - multiply: ${power_calibration}
   - platform: total_daily_energy
     name: "Tagesleistung"
     power_id: power
