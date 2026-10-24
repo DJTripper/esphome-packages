@@ -43,6 +43,19 @@ sensor:
       b_constant: 3350
       reference_resistance: 10kOhm
       reference_temperature: 298.15K
+    # Overheat protection (stock firmware also shuts off)
+    on_value:
+      - if:
+          condition:
+            and:
+              - lambda: 'return x > 90;'
+              - light.is_on: thislight
+          then:
+            - logger.log:
+                level: WARN
+                format: "Overheat (%.1f °C), switching light off"
+                args: [x]
+            - light.turn_off: thislight
   - platform: resistance
     id: temp_resistance_reading
     sensor: temp_analog_reading
@@ -52,10 +65,6 @@ sensor:
   - platform: adc
     id: temp_analog_reading
     pin: A0
-    disabled_by_default: True
-  - platform: adc
-    pin: VCC
-    name: "VCC"
     disabled_by_default: True
 
   # Total daily energy sensor
