@@ -79,12 +79,66 @@ sensor:
 
 binary_sensor:
   - platform: gpio
+    id: wall_switch
     pin:
       number: GPIO14
     name: Switch
     disabled_by_default: True
     filters:
       - delayed_on_off: 100ms
+    # Short press toggles, long press dims (direction alternates)
+    on_press:
+      then:
+        - lambda: 'id(long_pressed) = false;'
+        - script.execute: long_press_dim
     on_release:
       then:
-        - light.toggle: thislight
+        - script.stop: long_press_dim
+        - if:
+            condition:
+              lambda: 'return id(long_pressed);'
+            then:
+              - lambda: 'id(dim_up) = !id(dim_up);'
+            else:
+              - light.toggle: thislight
+
+globals:
+  - id: dim_up
+    type: bool
+    initial_value: 'true'
+  - id: long_pressed
+    type: bool
+    initial_value: 'false'
+
+script:
+  - id: long_press_dim
+    mode: restart
+    then:
+      - delay: 500ms
+      - lambda: 'id(long_pressed) = true;'
+      - if:
+          condition:
+            light.is_off: thislight
+          then:
+            # Start dimmed and ramp up
+            - lambda: 'id(dim_up) = true;'
+            - light.turn_on:
+                id: thislight
+                brightness: 1%
+          else:
+            # Reverse at the ends
+            - lambda: |-
+                float b = id(thislight).remote_values.get_brightness();
+                if (b >= 0.99f) id(dim_up) = false;
+                else if (b <= 0.02f) id(dim_up) = true;
+      - while:
+          condition:
+            binary_sensor.is_on: wall_switch
+          then:
+            - light.dim_relative:
+                id: thislight
+                relative_brightness: !lambda 'return id(dim_up) ? 0.05f : -0.05f;'
+                transition_length: 100ms
+                brightness_limits:
+                  min_brightness: 1%
+            - delay: 100ms
